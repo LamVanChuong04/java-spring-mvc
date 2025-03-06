@@ -28,7 +28,12 @@ public class UserService {
     }
     public User handleSaveUser(User user) {
         User test = this.userRepository.save(user);
-        System.out.println("User saved: " + test);
         return test;
+    }
+    public User getUserById(long id) {
+        return this.userRepository.findById(id);// trả về user ứng với id
+    }
+    public void deleteAUser(long id) {
+        this.userRepository.deleteById(id);
     }
 }
