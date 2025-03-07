@@ -47,25 +47,27 @@ public class UserController {
         model.addAttribute("test", test);
         return "hello";
     }
-    @RequestMapping("/admin/user/create") // GET
+     // create user
+    @GetMapping("/admin/user/create") // GET
     public String getCreateUserPage(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
-    @RequestMapping("/admin/user")
+    @PostMapping("/admin/user/create")
+    public String createUserPage(Model model, @ModelAttribute("newUser") User hoidanit) {
+        this.userService.handleSaveUser(hoidanit);
+        return "redirect:/admin/user";
+    }
+    // lấy danh sách user
+    @GetMapping("/admin/user")
     public String  getUserPage(Model model){
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("user1", users);
        
         return "admin/user/table-user";
     }
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-     public String createUserPage(Model model, @ModelAttribute("newUser") User hoidanit) {
-        this.userService.handleSaveUser(hoidanit);
-        return "redirect:/admin/user";
-    }
-
-    @RequestMapping("/admin/user/{id}")
+    // lấy thông tin chi tiết user
+    @GetMapping("/admin/user/{id}")
     public String getUserDetailPage(Model model, @PathVariable long id) {
         User user = this.userService.getUserById(id);// hứng user được trả về từ service
         model.addAttribute("user", user);// truyền dữ liệu từ controller sang view
@@ -75,7 +77,7 @@ public class UserController {
     }
 
     // update user
-    @RequestMapping("/admin/user/update/{id}") // GET
+    @GetMapping("/admin/user/update/{id}") // GET
     public String getUpdateUserPage(Model model, @PathVariable long id) {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("newUser", currentUser);
@@ -104,11 +106,7 @@ public class UserController {
     @PostMapping("/admin/user/delete")
     public String postDeleteUser(Model model, @ModelAttribute("newUser") User hoidanit) {
         this.userService.deleteAUser(hoidanit.getId());
-        
         return "redirect:/admin/user";
     }
 
-    
-    
-    
 }

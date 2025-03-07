@@ -10,15 +10,15 @@ import vn.hoidanit.laptopshop.repository.UserRepository;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    
+    // constructor
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
+    // lấy tất cả user
     public List<User> getAllUsers() {
         return this.userRepository.findAll();
     }
-
+    // lấy user theo email
     public List<User> getAllUsersByEmail(String email) {
         return this.userRepository.findOneByEmail(email);
     }
@@ -26,13 +26,16 @@ public class UserService {
     public String getHomePage() {
         return "Hoi Dan IT";
     }
+    // hàm save user sau khi tạo/delete
     public User handleSaveUser(User user) {
-        User test = this.userRepository.save(user);
-        return test;
+        User users = this.userRepository.save(user);
+        return users;
     }
+    // lấy user theo id
     public User getUserById(long id) {
         return this.userRepository.findById(id);// trả về user ứng với id
     }
+    // xóa user theo id
     public void deleteAUser(long id) {
         this.userRepository.deleteById(id);
     }
