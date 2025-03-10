@@ -1,9 +1,14 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
+import vn.hoidanit.laptopshop.controller.service.UploadFileService;
 import vn.hoidanit.laptopshop.model.User;
 
 import vn.hoidanit.laptopshop.service.UserService;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -18,6 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.servlet.ServletContext;
 
 
 
@@ -38,7 +46,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UserController {
     private UserService userService;
-    public UserController(UserService userService) {
+    private final UploadFileService uploadService;
+
+    public UserController(UserService userService, UploadFileService uploadService) {
+        this.uploadService = uploadService;
         this.userService = userService;
     }
     @RequestMapping("/")
@@ -53,17 +64,20 @@ public class UserController {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
-    @PostMapping("/admin/user/create")
-    public String createUserPage(Model model, @ModelAttribute("newUser") User hoidanit) {
-        this.userService.handleSaveUser(hoidanit);
-        return "redirect:/admin/user";
-    }
+    @PostMapping(value = "/admin/user/create")
+     public String createUserPage(Model model,
+             @ModelAttribute("newUser") User hoidanit,
+             @RequestParam("hoidanitFile") MultipartFile file) {
+ 
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+         // this.userService.handleSaveUser(hoidanit);
+         return "redirect:/admin/user";
+     }
     // lấy danh sách user
     @GetMapping("/admin/user")
     public String  getUserPage(Model model){
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("user1", users);
-       
         return "admin/user/show";
     }
     // lấy thông tin chi tiết user
