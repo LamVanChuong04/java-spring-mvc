@@ -1,7 +1,7 @@
-package vn.hoidanit.laptopshop.controller;
+package vn.hoidanit.laptopshop.controller.admin;
 
 import vn.hoidanit.laptopshop.model.User;
-import vn.hoidanit.laptopshop.repository.UserRepository;
+
 import vn.hoidanit.laptopshop.service.UserService;
 
 import java.util.List;
@@ -64,7 +64,7 @@ public class UserController {
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("user1", users);
        
-        return "admin/user/table-user";
+        return "admin/user/show";
     }
     // lấy thông tin chi tiết user
     @GetMapping("/admin/user/{id}")
@@ -73,7 +73,7 @@ public class UserController {
         model.addAttribute("user", user);// truyền dữ liệu từ controller sang view
         model.addAttribute("id", id);
 
-        return "admin/user/show";
+        return "admin/user/detail";
     }
 
     // update user
