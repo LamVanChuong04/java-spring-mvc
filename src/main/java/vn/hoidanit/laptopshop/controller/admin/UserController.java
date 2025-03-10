@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,14 +19,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.ServletContext;
+
 
 
 
@@ -45,12 +45,15 @@ import jakarta.servlet.ServletContext;
 
 @Controller
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
     private final UploadFileService uploadService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UploadFileService uploadService) {
+
+    public UserController(ServletContext servletContext, UserService userService, UploadFileService uploadService, PasswordEncoder passwordEncoder) {
         this.uploadService = uploadService;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
     @RequestMapping("/")
     public String  getHomePage(Model model){
@@ -70,8 +73,13 @@ public class UserController {
              @RequestParam("hoidanitFile") MultipartFile file) {
  
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-         // this.userService.handleSaveUser(hoidanit);
-         return "redirect:/admin/user";
+        String hashPassword = this.passwordEncoder.encode(hoidanit.getPassword());
+
+        hoidanit.setAvatar(avatar);
+        hoidanit.setPassword(hashPassword);
+        hoidanit.setRole(this.userService.getRoleByName(hoidanit.getRole().getName()));
+        this.userService.handleSaveUser(hoidanit);
+        return "redirect:/admin/user";
      }
     // lấy danh sách user
     @GetMapping("/admin/user")

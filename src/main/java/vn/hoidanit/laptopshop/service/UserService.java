@@ -4,15 +4,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import vn.hoidanit.laptopshop.model.Role;
 import vn.hoidanit.laptopshop.model.User;
+import vn.hoidanit.laptopshop.repository.RoleRepository;
 import vn.hoidanit.laptopshop.repository.UserRepository;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     // constructor
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
     // lấy tất cả user
     public List<User> getAllUsers() {
@@ -38,5 +42,9 @@ public class UserService {
     // xóa user theo id
     public void deleteAUser(long id) {
         this.userRepository.deleteById(id);
+    }
+    // lấy role theo id
+    public Role getRoleByName(String name) {
+        return this.roleRepository.findByName(name);
     }
 }
