@@ -22,6 +22,7 @@
             </head>
 
             <body>
+                <jsp:include page="../layout/header.jsp" />
                 <div class="container mt-5">
                     <div class="row">
                         <div class="col-12 mx-auto">
@@ -46,6 +47,7 @@
                     </div>
 
                 </div>
+                <!-- <jsp:include page="../layout/footer.jsp" /> -->
             </body>
 
             </html>

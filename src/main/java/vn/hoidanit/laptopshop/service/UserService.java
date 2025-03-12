@@ -1,9 +1,11 @@
 package vn.hoidanit.laptopshop.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import vn.hoidanit.laptopshop.model.Product;
 import vn.hoidanit.laptopshop.model.Role;
 import vn.hoidanit.laptopshop.model.User;
 import vn.hoidanit.laptopshop.repository.RoleRepository;
@@ -47,4 +49,5 @@ public class UserService {
     public Role getRoleByName(String name) {
         return this.roleRepository.findByName(name);
     }
+    
 }

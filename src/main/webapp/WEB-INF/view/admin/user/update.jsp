@@ -47,19 +47,25 @@
                                                     <form:input type="email" class="form-control" path="email"
                                                         disabled="true" />
                                                 </div>
+
                                                 <div class="mb-3">
-                                                    <label class="form-label">Phone number:</label>
-                                                    <form:input type="text" class="form-control" path="phone" />
-                                                </div>
-                                                <div class="mb-3">
+                                                    <c:set var="errorFullName">
+                                                        <form:errors path="fullName" cssClass="invalid-feedback" />
+                                                    </c:set>
                                                     <label class="form-label">Full Name:</label>
-                                                    <form:input type="text" class="form-control" path="fullName" />
+                                                    <form:input type="text" class="form-control 
+                                                        ${not empty errorFullName ? 'is-invalid' : ''}"
+                                                        path="fullName" />
+                                                    ${errorFullName}
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Address:</label>
                                                     <form:input type="text" class="form-control" path="address" />
                                                 </div>
-
+                                                <div class="mb-3">
+                                                    <label class="form-label">Phone number:</label>
+                                                    <form:input type="text" class="form-control" path="phone" />
+                                                </div>
                                                 <button type="submit" class="btn btn-primary">Update</button>
                                             </form:form>
                                         </div>
