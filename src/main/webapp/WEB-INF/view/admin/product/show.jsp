@@ -43,7 +43,7 @@
                                             <table class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Id</th>
+                                                        <th>ID</th>
                                                         <th>Name</th>
                                                         <th>Price</th>
                                                         <th>Quantity</th>

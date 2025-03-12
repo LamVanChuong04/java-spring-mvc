@@ -1,6 +1,7 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 import vn.hoidanit.laptopshop.controller.service.ProductService;
 import vn.hoidanit.laptopshop.controller.service.UploadFileService;
 import vn.hoidanit.laptopshop.model.Product;
+import vn.hoidanit.laptopshop.model.User;
 
 ;
 
@@ -63,11 +65,61 @@ public class ProductController {
     // trang chi tiet san pham
     @GetMapping("/admin/product/{id}")
     public String getUserDetailPage(Model model, @PathVariable long id) {
-        Product pr = this.productService.findProductById(id);// hứng user được trả về từ service
+        Product pr = this.productService.fetchProductById(id).get();// hứng user được trả về từ service
         model.addAttribute("product", pr);// truyền dữ liệu từ controller sang view
         model.addAttribute("id", id);
 
         return "admin/product/detail";
     }
-
+    // delete product
+    @GetMapping("/admin/product/delete/{id}")
+    public String getDeleteUser(Model model, @PathVariable long id) {
+        model.addAttribute("id", id);
+        model.addAttribute("newProduct", new Product());
+        return "admin/product/delete";
+    }
+    @PostMapping("/admin/product/delete")
+    public String postDeleteUser(Model model, @ModelAttribute("newUser") User hoidanit) {
+        this.productService.deleteProduct(hoidanit.getId());
+        return "redirect:/admin/product";
+    }
+    // update product
+    @GetMapping("/admin/product/update/{id}")
+     public String getUpdateProductPage(Model model, @PathVariable long id) {
+         Optional<Product> currentProduct = this.productService.fetchProductById(id);
+         model.addAttribute("newProduct", currentProduct.get());
+         return "admin/product/update";
+     }
+ 
+     @PostMapping("/admin/product/update")
+     public String handleUpdateProduct(@ModelAttribute("newProduct") @Valid Product pr,
+             BindingResult newProductBindingResult,
+             @RequestParam("chuong") MultipartFile file) {
+ 
+         // validate
+         if (newProductBindingResult.hasErrors()) {
+             return "admin/product/update";
+         }
+ 
+         Product currentProduct = this.productService.fetchProductById(pr.getId()).get();
+         if (currentProduct != null) {
+             // update new image
+             if (!file.isEmpty()) {
+                 String img = this.uploadFileService.handleSaveUploadFile(file, "product");
+                 currentProduct.setImage(img);
+             }
+ 
+             currentProduct.setName(pr.getName());
+             currentProduct.setPrice(pr.getPrice());
+             currentProduct.setQuantity(pr.getQuantity());
+             currentProduct.setDetailDesc(pr.getDetailDesc());
+             currentProduct.setShortDesc(pr.getShortDesc());
+             currentProduct.setFactory(pr.getFactory());
+             currentProduct.setTarget(pr.getTarget());
+ 
+             this.productService.createProduct(currentProduct);
+         }
+ 
+         return "redirect:/admin/product";
+     }
  }

@@ -29,7 +29,8 @@
                                 <h1 class="mt-4">Manage Users</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Users</li>
+                                    <li class="breadcrumb-item active"><a href="/admin/user">User</a></li>
+                                    <li class="breadcrumb-item active">Update</li>
                                 </ol>
                                 <div class=" mt-5">
                                     <div class="row">
@@ -37,7 +38,18 @@
                                             <h3>Update a user</h3>
                                             <hr />
                                             <form:form method="post" action="/admin/user/update"
-                                                modelAttribute="newUser">
+                                                modelAttribute="newUser" enctype="multipart/form-data">
+
+                                                <c:set var="errorFullName">
+                                                    <form:errors path="fullName" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorPhone">
+                                                    <form:errors path="phone" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorAddress">
+                                                    <form:errors path="address" cssClass="invalid-feedback" />
+                                                </c:set>
+
                                                 <div class="mb-3" style="display: none;">
                                                     <label class="form-label">ID:</label>
                                                     <form:input type="text" class="form-control" path="id" />
@@ -49,9 +61,7 @@
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <c:set var="errorFullName">
-                                                        <form:errors path="fullName" cssClass="invalid-feedback" />
-                                                    </c:set>
+
                                                     <label class="form-label">Full Name:</label>
                                                     <form:input type="text" class="form-control 
                                                         ${not empty errorFullName ? 'is-invalid' : ''}"
@@ -60,11 +70,25 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Address:</label>
-                                                    <form:input type="text" class="form-control" path="address" />
+                                                    <form:input type="text" class="form-control 
+                                                        ${not empty errorAddress ? 'is-invalid' : ''}"
+                                                        path="address" />
+                                                    ${errorAddress}
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Phone number:</label>
-                                                    <form:input type="text" class="form-control" path="phone" />
+                                                    <form:input type="text" class="form-control 
+                                                        ${not empty errorphone ? 'is-invalid' : ''}" path="phone" />
+                                                    ${errorPhone}
+                                                </div>
+                                                <div class="mb-3 col-12 col-md-6">
+                                                    <label for="avatarFile" class="form-label">Image:</label>
+                                                    <input class="form-control" type="file" id="avatarFile"
+                                                        accept=".png, .jpg, .jpeg" name="chuong" />
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <img style="max-height: 250px; display: none;" alt="avatar preview"
+                                                        id="avatarPreview" />
                                                 </div>
                                                 <button type="submit" class="btn btn-primary">Update</button>
                                             </form:form>

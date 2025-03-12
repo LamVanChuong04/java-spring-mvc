@@ -72,7 +72,7 @@ public class UserController {
     }
     @PostMapping(value = "/admin/user/create")
      public String createUserPage(Model model,
-            @ModelAttribute("newUser") @Valid User hoidanit,
+            @ModelAttribute("newUser") @Valid User chuong,
             BindingResult newUserBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
         
@@ -85,12 +85,12 @@ public class UserController {
             return "admin/user/create";
         }
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-        String hashPassword = this.passwordEncoder.encode(hoidanit.getPassword());
+        String hashPassword = this.passwordEncoder.encode(chuong.getPassword());
 
-        hoidanit.setAvatar(avatar);
-        hoidanit.setPassword(hashPassword);
-        hoidanit.setRole(this.userService.getRoleByName(hoidanit.getRole().getName()));
-        this.userService.handleSaveUser(hoidanit);
+        chuong.setAvatar(avatar);
+        chuong.setPassword(hashPassword);
+        chuong.setRole(this.userService.getRoleByName(chuong.getRole().getName()));
+        this.userService.handleSaveUser(chuong);
         return "redirect:/admin/user";
      }
     // lấy danh sách user
@@ -120,13 +120,25 @@ public class UserController {
 
     @PostMapping("/admin/user/update")
     public String postUpdateUser(Model model, @ModelAttribute("newUser") @Valid User chuong,
-    BindingResult newUserBindingResult) {
+    BindingResult newUserBindingResult,
+    @RequestParam("chuong") MultipartFile file) {
+        
+        if (newUserBindingResult.hasErrors()) {
+            return "admin/user/update";
+        }
         User currentUser = this.userService.getUserById(chuong.getId());
         if (currentUser != null) {
+            // update new image
+            if (!file.isEmpty()) {
+                String img = this.uploadService.handleSaveUploadFile(file, "avatar");
+                currentUser.setAvatar(img);
+            }
             currentUser.setAddress(chuong.getAddress());
             currentUser.setFullName(chuong.getFullName());
             currentUser.setPhone(chuong.getPhone());
             System.out.println("User updated: " + currentUser);
+            
+
             this.userService.handleSaveUser(currentUser);
         }
         return "redirect:/admin/user";
