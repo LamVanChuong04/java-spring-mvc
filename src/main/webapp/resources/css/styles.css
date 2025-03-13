@@ -7800,7 +7800,6 @@ textarea.form-control-lg {
 
 .py-5 {
   padding-top: 3rem !important;
-  padding-bottom: 3rem !important;
 }
 
 .pt-0 {
@@ -8052,7 +8051,7 @@ textarea.form-control-lg {
 /* rtl:end:remove */
 .text-primary {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  color: #1e86d2 !important;
 }
 
 .text-secondary {
