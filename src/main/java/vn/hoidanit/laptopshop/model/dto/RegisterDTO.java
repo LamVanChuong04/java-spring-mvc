@@ -1,5 +1,8 @@
 package vn.hoidanit.laptopshop.model.dto;
 
+import vn.hoidanit.laptopshop.controller.service.valid.RegisterChecked;
+
+@RegisterChecked
 public class RegisterDTO {
     private String firstName;
     private String lastName;
