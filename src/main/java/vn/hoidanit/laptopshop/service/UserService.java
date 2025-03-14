@@ -1,13 +1,14 @@
 package vn.hoidanit.laptopshop.service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.stereotype.Service;
 
-import vn.hoidanit.laptopshop.model.Product;
+
 import vn.hoidanit.laptopshop.model.Role;
 import vn.hoidanit.laptopshop.model.User;
+import vn.hoidanit.laptopshop.model.dto.RegisterDTO;
 import vn.hoidanit.laptopshop.repository.RoleRepository;
 import vn.hoidanit.laptopshop.repository.UserRepository;
 
@@ -48,5 +49,14 @@ public class UserService {
     // lấy role theo id
     public Role getRoleByName(String name) {
         return this.roleRepository.findByName(name);
+    }
+    // DTO
+    public User dtoToUser(RegisterDTO registerDTO) {
+        User user = new User();
+        user.setEmail(registerDTO.getEmail());
+        user.setFullName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
+        user.setAddress(registerDTO.getAddress());
+        user.setPassword(registerDTO.getPassword());
+        return user;
     }
 }
